@@ -148,6 +148,7 @@ class Staging(Common):
     SECURE_SSL_HOST = values.Value(None)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
     SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"))
+    ALLOWED_HOSTS = ["3.8.134.231"]
 
 
 class Production(Staging):
