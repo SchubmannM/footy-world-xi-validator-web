@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class='container'>
+    <button style="margin-bottom: 1em" type="button" class="btn btn-primary" onclick="history.back(-1)">Back</button>
+    {% if submission.is_correct%}
+    <div class="alert alert-success" role="alert">
+        Great team! And its valid as well! 🥳
+    </div>
+    {% else %}
+    <div class="alert alert-danger" role="alert"> 
+        <p>Unfortunatly this team is not correct 😞</p>
+        <p>{{submission.reason_incorrect|safe}}</p>
+    </div>
+    {% endif %}
+    <ol>
+        {% for player in submission.players.all %}
+            <li>{{player}}</li>
+        {% endfor %}
+    </ol>
+</div>
+{% endblock content %}
