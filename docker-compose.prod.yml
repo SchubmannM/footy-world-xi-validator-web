@@ -2,8 +2,10 @@ version: '3.7'
 
 services:
   web:
-    build: .
-    command: python /code/manage.py runserver_plus 0.0.0.0:8000
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    command: gunicorn -b "0.0.0.0:8000" -w 3 footy_world_xi_validator.wsgi
     volumes:
       - .:/code
     ports:
@@ -11,7 +13,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./.env.dev
+      - ./.env.prod
   db:
     image: postgres:12.1
     volumes:

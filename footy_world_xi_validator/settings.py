@@ -11,8 +11,6 @@ import os
 
 from configurations import Configuration, values
 
-from dotenv import load_dotenv
-
 
 class Common(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -78,9 +76,16 @@ class Common(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-    DATABASES = values.DatabaseURLValue(
-        "sqlite:///{}".format(os.path.join(BASE_DIR, "db.sqlite3"))
-    )
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "db",
+            "PORT": 5432,
+        }
+    }
 
     # Password validation
     # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -122,8 +127,6 @@ class Development(Common):
     The in-development settings and the default configuration.
     """
 
-    load_dotenv()
-
     DEBUG = True
 
     ALLOWED_HOSTS = []
@@ -148,7 +151,9 @@ class Staging(Common):
     SECURE_SSL_HOST = values.Value(None)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
     SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"))
-    ALLOWED_HOSTS = ["3.8.134.231"]
+    # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
+    # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
+    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 class Production(Staging):
@@ -156,13 +161,4 @@ class Production(Staging):
     The in-production settings.
     """
 
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "postgres",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
-            "HOST": "db",
-            "PORT": 5432,
-        }
-    }
+    pass
