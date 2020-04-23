@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python /code/manage.py runserver_plus 0.0.0.0:8000
+    command: gunicorn -b "0.0.0.0:8000" -w 3 footy_world_xi_validator.wsgi
     volumes:
       - .:/code
     ports:
