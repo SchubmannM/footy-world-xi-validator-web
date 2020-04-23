@@ -7,11 +7,11 @@ name = "pypi"
 Werkzeug = "==1.0.0"
 black = "*"
 python-dotenv = "*"
+django-debug-toolbar = "==2.2"
 
 [packages]
 dj-database-url = "==0.5.0"
 django-configurations = "==2.2"
-django-debug-toolbar = "==2.2"
 django-extensions = "==2.2.9"
 Django = "==3.0.*"
 psycopg2-binary = "==2.8.4"
