@@ -38,10 +38,14 @@ def get_player(input_player_name: str) -> Optional[FootballPlayerData]:
 
     for transfer in transfers:
         transfer_table_rows = transfer.findAll("a", {"class": "vereinprofil_tooltip"})
-
-        left_team = transfer_table_rows[2].text
-        teams.append(ClubTeamData(name=left_team))
-
+        try:
+            left_team = transfer_table_rows[2].text
+            teams.append(ClubTeamData(name=left_team))
+        except IndexError:
+            logger.warning(
+                "The club table with transfers does not have a second column. The player probably didn't have a club."
+            )
+            pass
         try:
             joined_team = transfer_table_rows[5].text
             teams.append(ClubTeamData(name=joined_team))
