@@ -1,15 +1,18 @@
 # Pull base image
-FROM python:3.8.2-slim
+FROM python:3.8.2
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set work directory
-WORKDIR /code
+ENV APP_HOME=/code/
+WORKDIR $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
 
 # Install dependencies
-COPY Pipfile Pipfile.lock /code/
+COPY Pipfile Pipfile.lock $APP_HOME
 RUN pip install pipenv && pipenv install --system
+
 # Copy project
-COPY . /code/
+COPY . $APP_HOME

@@ -8,8 +8,8 @@ services:
     command: gunicorn -b "0.0.0.0:8000" -w 3 footy_world_xi_validator.wsgi
     volumes:
       - .:/code
-    ports:
-      - 8080:8000
+    expose:
+      - 8000
     depends_on:
       - db
     env_file:
@@ -18,6 +18,16 @@ services:
     image: postgres:12.1
     volumes:
     - postgres_data:/var/lib/postgresql/data
-
+    env_file:
+      - ./.env.db.prod
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/code/staticfiles
+    ports:
+      - 8000:80
+    depends_on:
+      - web    
 volumes:
   postgres_data:
+  static_volume:

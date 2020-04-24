@@ -6,8 +6,8 @@ services:
     command: python /code/manage.py runserver_plus 0.0.0.0:8000
     volumes:
       - .:/code
-    ports:
-      - 8080:8000
+    expose:
+      - 8000
     depends_on:
       - db
     env_file:
@@ -16,6 +16,25 @@ services:
     image: postgres:12.1
     volumes:
     - postgres_data:/var/lib/postgresql/data
-
+    env_file:
+      - ./.env.db.dev
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/code/staticfiles
+      - .:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    ports:
+      - 8000:80
+      - 443:443
+    depends_on:
+      - web
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
 volumes:
   postgres_data:
+  static_volume:
