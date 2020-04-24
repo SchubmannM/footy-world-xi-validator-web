@@ -12,23 +12,27 @@ class FootballPlayerForm(forms.ModelForm):
         fields = ("full_name",)
         widgets = {
             "full_name": forms.TextInput(
-                attrs={"placeholder": "Full name (e.g. Thomas Müller)"}
+                attrs={
+                    "placeholder": "Full name (e.g. Thomas Müller)",
+                    "required": True,
+                }
             )
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        full_name = cleaned_data.get("full_name")
-        if not FootballPlayer.objects.filter(full_name__iexact=full_name).exists():
-            player = get_player(full_name)
-        else:
-            player = FootballPlayerData.from_instance(
-                player=FootballPlayer.objects.get(full_name__iexact=full_name)
-            )
-        if not player:
-            msg = "The player with this name could not be found. Please try a different name."
-            self.add_error("full_name", msg)
-        cleaned_data["player"] = player
+        full_name = cleaned_data.get("full_name", "").strip()
+        if full_name:
+            if not FootballPlayer.objects.filter(full_name__iexact=full_name).exists():
+                player = get_player(full_name)
+            else:
+                player = FootballPlayerData.from_instance(
+                    player=FootballPlayer.objects.get(full_name__iexact=full_name)
+                )
+            if not player:
+                msg = "The player with this name could not be found. Please try a different name."
+                self.add_error("full_name", msg)
+            cleaned_data["player"] = player
         return cleaned_data
 
 

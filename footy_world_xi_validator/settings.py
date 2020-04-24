@@ -11,6 +11,9 @@ import os
 
 from configurations import Configuration, values
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 class Common(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -76,17 +79,21 @@ class Common(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "postgres",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
-            "HOST": "db",
-            "PORT": 5432,
-        }
-    }
-
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+    #         "NAME": os.environ.get(
+    #             "SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")
+    #         ),
+    #         "USER": os.environ.get("SQL_USER", "user"),
+    #         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+    #         "HOST": os.environ.get("SQL_HOST", "localhost"),
+    #         "PORT": os.environ.get("SQL_PORT", "5432"),
+    #     }
+    # }
+    DATABASES = values.DatabaseURLValue(
+        "sqlite:///{}".format(os.path.join(BASE_DIR, "db.sqlite3"))
+    )
     # Password validation
     # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
     AUTH_PASSWORD_VALIDATORS = [
@@ -151,9 +158,6 @@ class Staging(Common):
     SECURE_SSL_HOST = values.Value(None)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
     SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"))
-    # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
-    # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 class Production(Staging):
@@ -161,4 +165,6 @@ class Production(Staging):
     The in-production settings.
     """
 
-    pass
+    if os.getenv("SENTRY_DSN", None):
+        sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[DjangoIntegration()])
+    Staging.ALLOWED_HOSTS = ["*"]
