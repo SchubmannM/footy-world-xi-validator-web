@@ -23,18 +23,11 @@ services:
     volumes:
       - static_volume:/code/staticfiles
       - .:/etc/nginx/conf.d
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     ports:
       - 8000:80
       - 443:443
     depends_on:
       - web
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
 volumes:
   postgres_data:
   static_volume:
