@@ -8,9 +8,13 @@ class NationalTeam(TimeStampedModel):
     name = models.CharField(max_length=300)
 
     class Meta:
+        ordering = ["name"]
         indexes = [
             models.Index(fields=["name"]),
         ]
+
+    def __str__(self):
+        return self.name
 
 
 class ClubTeam(TimeStampedModel):
@@ -18,9 +22,13 @@ class ClubTeam(TimeStampedModel):
     name = models.CharField(max_length=300)
 
     class Meta:
+        ordering = ["name"]
         indexes = [
             models.Index(fields=["name"]),
         ]
+
+    def __str__(self):
+        return self.name
 
 
 class FootballPlayer(TimeStampedModel):
@@ -35,6 +43,7 @@ class FootballPlayer(TimeStampedModel):
         return self.full_name
 
     class Meta:
+        ordering = ["full_name"]
         indexes = [
             models.Index(fields=["full_name"]),
             models.Index(fields=["alias"]),
