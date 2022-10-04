@@ -4,19 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-Werkzeug = "==1.0.0"
+Werkzeug = "==2.2.2"
 black = "*"
 python-dotenv = "*"
 
 [packages]
-django-debug-toolbar = "==2.2"
-dj-database-url = "==0.5.0"
-django-configurations = "==2.2"
-django-extensions = "==2.2.9"
-Django = "==3.0.*"
-psycopg2-binary = "==2.8.4"
-gunicorn = "==20.0.4"
-whitenoise = "==5.0.1"
+django-debug-toolbar = "==3.7.0"
+dj-database-url = "==1.0.0"
+django-configurations = "==2.4"
+django-extensions = "==3.2.1"
+Django = "==4.1.2"
+psycopg2-binary = "==2.9.3"
+gunicorn = "==20.1.0"
+whitenoise = "==6.2.0"
 beautifulsoup4 = "*"
 django-crispy-forms = "*"
 requests = "*"
@@ -26,4 +26,4 @@ sentry-sdk = "*"
 allow_prereleases = true
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
