@@ -1,38 +1,33 @@
-version: '3.7'
+version: '3.9'
 
 services:
   web:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    command: gunicorn -b "0.0.0.0:8000" -w 3 footy_world_xi_validator.wsgi
+    command: gunicorn -b "localhost:8088" -w 3 footy_world_xi_validator.wsgi
     volumes:
       - .:/code
-    expose:
-      - 8000
+    ports:
+      - 8088:8088
     depends_on:
       - db
     env_file:
       - ./.env.prod
   db:
-    image: postgres:12.1
+    image: postgres:14.5
+    restart: always
     volumes:
     - postgres_data:/var/lib/postgresql/data
     env_file:
       - ./.env.db.prod
-  nginx:
-    build: ./nginx
-    volumes:
-      - static_volume:/code/staticfiles
+  
+  adminer:
+    image: adminer
+    restart: always
     ports:
-      - 8000:80
-    depends_on:
-      - web    
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - 8080:8080
+      
 volumes:
   postgres_data:
   static_volume:
