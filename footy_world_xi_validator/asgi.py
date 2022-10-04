@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/asgi/
 
 import os
 
-from django.core.asgi import get_asgi_application
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'footy_world_xi_validator.settings')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'Development')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core_service.settings")
+from configurations.asgi import get_asgi_application
 
 application = get_asgi_application()

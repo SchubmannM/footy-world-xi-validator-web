@@ -7,6 +7,8 @@ name = "pypi"
 Werkzeug = "==2.2.2"
 black = "*"
 python-dotenv = "*"
+pylint = "*"
+mypy = "*"
 
 [packages]
 django-debug-toolbar = "==3.7.0"
@@ -21,6 +23,8 @@ beautifulsoup4 = "*"
 django-crispy-forms = "*"
 requests = "*"
 sentry-sdk = "*"
+hypercorn = "*"
+daphne = "*"
 
 [pipenv]
 allow_prereleases = true

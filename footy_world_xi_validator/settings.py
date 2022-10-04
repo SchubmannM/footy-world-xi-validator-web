@@ -15,7 +15,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
-class Common(Configuration):
+class Base(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -125,7 +125,7 @@ class Common(Configuration):
     CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
-class Development(Common):
+class Dev(Base):
     """
     The in-development settings and the default configuration.
     """
@@ -136,10 +136,10 @@ class Development(Common):
 
     INTERNAL_IPS = ["127.0.0.1"]
 
-    MIDDLEWARE = Common.MIDDLEWARE + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+    MIDDLEWARE = Base.MIDDLEWARE + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 
-class Staging(Common):
+class Staging(Base):
     """
     The in-staging settings.
     """
@@ -153,14 +153,14 @@ class Staging(Common):
     SECURE_REDIRECT_EXEMPT = values.ListValue([])
     SECURE_SSL_HOST = values.Value(None)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
+    CSRF_COOKIE_SECURE = values.BooleanValue(True)
     SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"))
 
 
-class Production(Staging):
+class Prod(Staging):
     """
     The in-production settings.
     """
 
     if os.getenv("SENTRY_DSN", None):
         sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[DjangoIntegration()])
-    Staging.ALLOWED_HOSTS = ["*"]
