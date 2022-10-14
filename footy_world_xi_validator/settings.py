@@ -35,11 +35,9 @@ class Base(Configuration):
         "django.contrib.sessions",
         "django.contrib.messages",
         # Static file handler
-        "whitenoise.runserver_nostatic",
         "django.contrib.staticfiles",
         # 3rd party
         "django_extensions",
-        "debug_toolbar",
         "crispy_forms",
         # Own packages
         "footy_world_xi_validator.users",
@@ -48,7 +46,6 @@ class Base(Configuration):
 
     MIDDLEWARE = [
         "django.middleware.security.SecurityMiddleware",
-        "whitenoise.middleware.WhiteNoiseMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.common.CommonMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
@@ -77,8 +74,8 @@ class Base(Configuration):
 
     WSGI_APPLICATION = "footy_world_xi_validator.wsgi.application"
 
-    # Database
-    # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+    # # Database
+    # # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -117,7 +114,6 @@ class Base(Configuration):
     # https://docs.djangoproject.com/en/3.0/howto/static-files/
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
     AUTH_USER_MODEL = "users.User"
 
@@ -137,25 +133,22 @@ class Dev(Base):
     INTERNAL_IPS = ["127.0.0.1"]
 
     MIDDLEWARE = Base.MIDDLEWARE + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
-
+    INSTALLED_APPS = Base.INSTALLED_APPS + ["debug_toolbar"]
 
 class Staging(Base):
     """
     The in-staging settings.
     """
-
     # Security
     SESSION_COOKIE_SECURE = values.BooleanValue(True)
     SECURE_BROWSER_XSS_FILTER = values.BooleanValue(True)
     SECURE_CONTENT_TYPE_NOSNIFF = values.BooleanValue(True)
     SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(True)
     SECURE_HSTS_SECONDS = values.IntegerValue(31536000)
-    SECURE_REDIRECT_EXEMPT = values.ListValue([])
-    SECURE_SSL_HOST = values.Value(None)
-    SECURE_SSL_REDIRECT = values.BooleanValue(True)
+    SESSION_COOKIE_SECURE = values.BooleanValue(True)
     CSRF_COOKIE_SECURE = values.BooleanValue(True)
-    SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"))
-
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    CSRF_TRUSTED_ORIGINS = ['https://www.schubmann.dev', 'https://schubmann.dev', 'https://www.schubmann.dev']
 
 class Prod(Staging):
     """

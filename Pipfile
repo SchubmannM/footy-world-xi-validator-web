@@ -9,21 +9,18 @@ black = "*"
 python-dotenv = "*"
 pylint = "*"
 mypy = "*"
+django-debug-toolbar = "*"
 
 [packages]
-django-debug-toolbar = "==3.7.0"
 dj-database-url = "==1.0.0"
 django-configurations = "==2.4"
 django-extensions = "==3.2.1"
 Django = "==4.1.2"
 psycopg2-binary = "==2.9.3"
-gunicorn = "==20.1.0"
-whitenoise = "==6.2.0"
 beautifulsoup4 = "*"
 django-crispy-forms = "*"
 requests = "*"
 sentry-sdk = "*"
-hypercorn = "*"
 daphne = "*"
 
 [pipenv]

@@ -12,6 +12,8 @@ services:
       - db
     env_file:
       - ./.env.dev
+    networks:
+      - proxynet
   db:
     image: postgres:14.5
     restart: always
@@ -23,3 +25,7 @@ services:
 volumes:
   postgres_data:
   static_volume:
+
+networks:
+  proxynet:
+    external: true
