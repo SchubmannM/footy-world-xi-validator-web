@@ -14,4 +14,3 @@ RUN pip install pipenv && pipenv install --system --dev
 RUN apt-get update && apt-get install -y gettext libgettextpo-dev
 # Copy project
 COPY . /code/
-ENTRYPOINT [ "entrypoint.sh" ]

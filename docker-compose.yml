@@ -1,8 +1,18 @@
 version: '3.9'
 
 services:
+  db:
+    image: postgres:14.5
+    restart: always
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env.db.dev
+    networks:
+      - proxynet
   web:
     build: .
+    entrypoint: ./entrypoint.sh
     command: python /code/manage.py runserver_plus 0.0.0.0:8000
     volumes:
       - .:/code
@@ -14,13 +24,7 @@ services:
       - ./.env.dev
     networks:
       - proxynet
-  db:
-    image: postgres:14.5
     restart: always
-    volumes:
-    - postgres_data:/var/lib/postgresql/data
-    env_file:
-      - ./.env.db.dev
       
 volumes:
   postgres_data:

@@ -5,8 +5,8 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
+    entrypoint: ./entrypoint.sh
     command: daphne -b 0.0.0.0 -p 8080 footy_world_xi_validator.asgi:application
-    # command: gunicorn -w 3 -b 0.0.0.0:8080 footy_world_xi_validator.wsgi
     volumes:
       - .:/code
     ports:
