@@ -7,9 +7,8 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
 import os
 
 
-configuration = os.getenv("ENVIRONMENT", "development").title()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "footy_world_xi_validator.settings")
-os.environ.setdefault("DJANGO_CONFIGURATION", configuration)
+os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
 
 from configurations.wsgi import get_wsgi_application
 

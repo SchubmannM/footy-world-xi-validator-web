@@ -115,6 +115,10 @@ class Base(Configuration):
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
+    # MEDIA settings
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
     AUTH_USER_MODEL = "users.User"
 
     # Django Crispy Forms
