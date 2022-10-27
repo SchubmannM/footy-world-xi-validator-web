@@ -180,6 +180,7 @@ class Staging(Base):
         "https://www.schubmann.dev",
         "https://schubmann.dev",
         "https://www.schubmann.dev",
+        "https://footy.schubmann.dev"
     ]
 
 
