@@ -1,0 +1,26 @@
+{% if is_correct %}
+    <div class="alert alert-success" role="alert">
+        Congratulations! Your World XI is valid against the outlined rules 🥳
+    </div>
+{% else %}
+    <div class="alert alert-danger" role="alert">
+        Sadly your chosen team does not comply with the outlined rules. You can check the conflicting players below.
+    </div>
+{% endif %}
+<div>
+    {% for validation in validations %}
+        <ul class="d-grid gap-4 my-5 list-unstyled">
+            <li class="d-flex gap-4">
+                <img class="player_validation_photo"
+                     src="{{ validation.player.profile_picture_url }}"
+                     alt="Player photo"/>
+                <div>
+                    <h5 class="mb-0">{{ validation.player.full_name }}</h5>
+                    <ul>
+                        {% for reason in validation.reasons_incorrect %}<li>{{ reason }}</li>{% endfor %}
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+</div>

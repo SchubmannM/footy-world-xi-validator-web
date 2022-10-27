@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import FootballPlayer, NationalTeam, ClubTeam, UserSubmission
 from django.db.models import Count
+
+from .models import ClubTeam, FootballPlayer, NationalTeam, UserSubmission
 
 
 @admin.register(NationalTeam)

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class FootyValidatorConfig(AppConfig):
-    name = 'footy_validator'
+    name = "footy_validator"

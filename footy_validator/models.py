@@ -1,6 +1,7 @@
-from django_extensions.db.models import TimeStampedModel
-from django.db import models
 import uuid
+
+from django.db import models
+from django_extensions.db.models import TimeStampedModel
 
 
 class NationalTeam(TimeStampedModel):
@@ -38,6 +39,8 @@ class FootballPlayer(TimeStampedModel):
     alias = models.CharField(max_length=300, blank=True)
     national_teams = models.ManyToManyField(NationalTeam, related_name="players")
     club_teams = models.ManyToManyField(ClubTeam, related_name="players")
+    profile_picture_url = models.URLField(blank=True)
+    profile_url = models.URLField(blank=True)
 
     def __str__(self):
         return self.full_name
@@ -48,6 +51,23 @@ class FootballPlayer(TimeStampedModel):
             models.Index(fields=["full_name"]),
             models.Index(fields=["alias"]),
         ]
+
+
+class TemporaryUserSubmission(TimeStampedModel):
+    id = models.UUIDField(editable=False, default=uuid.uuid4, primary_key=True)
+    players = models.ManyToManyField(
+        FootballPlayer,
+        related_name="temporary_user_submission",
+        through="TemporarySubmissionPlayers",
+    )
+
+
+class TemporarySubmissionPlayers(TimeStampedModel):
+    id = models.UUIDField(editable=False, default=uuid.uuid4, primary_key=True)
+    player = models.ForeignKey(FootballPlayer, on_delete=models.CASCADE)
+    temp_user_submission = models.ForeignKey(
+        TemporaryUserSubmission, on_delete=models.CASCADE
+    )
 
 
 class UserSubmission(TimeStampedModel):

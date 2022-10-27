@@ -1,0 +1,25 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/footy.css' %}"/>
+<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"/>
+{% if search_result %}
+    <form>
+        {% csrf_token %}
+        <input type="hidden"
+               id="playerUrl"
+               name="playerUrl"
+               value="{{ search_result.player_url }}">
+        <div id="search_results_content">
+            <div id="search_result_player_image">
+                <img class="img-thumbnail" src="{{ search_result.player_picture }}">
+            </div>
+            <div id="search_result_player_name">{{ search_result.player_name }}</div>
+            <div id="search_result_button">
+                <button class="btn btn-primary"
+                        hx-post="{% url 'add-to-team-view' %}"
+                        hx-target="#current_player_submission">
+                    Add to team
+                </button>
+            </div>
+        </div>
+    </form>
+{% endif %}

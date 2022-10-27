@@ -12,12 +12,12 @@ services:
   web:
     build: .
     entrypoint: ./entrypoint.sh
-    command: python /code/manage.py runserver_plus 0.0.0.0:8000
     volumes:
       - .:/code
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python ./manage.py migrate && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 ./manage.py runserver 0.0.0.0:8000"]
     ports:
       - 8000:8000
-      - 3000:3000
+      - 5678:5678
     depends_on:
       - db
     env_file:

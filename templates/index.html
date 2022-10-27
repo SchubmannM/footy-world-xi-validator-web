@@ -1,16 +1,59 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
-<div class='container'>
-<div class="jumbotron">
-  <h1 class="display-4">Welcome to Footy World XI Validator</h1>
-  <p class="lead">The intention of this app is to be a validator for a little game that was started on Twitter:</p>
-  <div class="d-flex justify-content-center">
-  <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Inspired by <a href="https://twitter.com/Carra23?ref_src=twsrc%5Etfw">@Carra23</a>, quote this with your picks for the greatest World XI under these the rules:<br> <br>• No two players from the same country<br>• No two can have played for the same club<br>• All eleven have to have played in your lifetime</p>&mdash; MUNDIAL (H) (@MundialMag) <a href="https://twitter.com/MundialMag/status/1250080258122022915?ref_src=twsrc%5Etfw">April 14, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <div class="container">
+    <div class="jumbotron">
+      <h1 class="display-4">Welcome to Footy World XI Validator</h1>
+      <p class="lead">The intention of this app is to be a validator for a little game that was started on Twitter:</p>
+      <div class="d-flex justify-content-center">
+        <blockquote class="twitter-tweet">
+          <p lang="en" dir="ltr">
+            Inspired by <a href="https://twitter.com/Carra23?ref_src=twsrc%5Etfw">@Carra23</a>, quote this with your picks for the greatest World XI under these the rules:
+            <br/>
+            <br/>
+            • No two players from the same country
+            <br/>
+            • No two can have played for the same club
+            <br/>
+            • All eleven have to have played in your lifetime
+          </p>
+          MUNDIAL (H) (@MundialMag) <a href="https://twitter.com/MundialMag/status/1250080258122022915?ref_src=twsrc%5Etfw">April 14, 2020</a>
+        </blockquote>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+      <hr class="my-4"/>
+      <p>Go ahead and submit your World XI and see if it meets the criteria or not 😊</p>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade"
+         id="resultsModal"
+         tabindex="-1"
+         aria-labelledby="resultsModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="resultsModalLabel">Results</h1>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="validation_results">
+              <div id="indicator htmx-indicator" class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-lg btn-primary mt-5 w-100"
+                    data-bs-dismiss="modal">Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="current_player_submission">{% include "partials/temporary_team.html" %}</div>
   </div>
-  <hr class="my-4">
-  <p>Go ahead and submit your World XI and see if it meets the criteria or not 😊</p>
-</div>
-{% crispy formset helper %}
-</div>
 {% endblock content %}

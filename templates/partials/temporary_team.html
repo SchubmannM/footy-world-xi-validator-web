@@ -1,0 +1,55 @@
+{% load static %}
+{% if players.count < 11 %}
+  <div class="form-floating" id="player_name_form">
+    <input type="text"
+           class="form-control"
+           name="player_name"
+           hx-post="{% url 'find-player-view' %}"
+           hx-trigger="keyup delay:500ms changed"
+           hx-target="#search-results"
+           placeholder="Player name"/>
+    <label for="player_name">Add player name</label>
+  </div>
+  <div id="search-results"></div>
+{% endif %}
+<hr />
+<p>Current number of players: {{ players.count }}</p>
+{% if players.count == 11 %}
+  <div id="submit_validation">
+    <form>
+      {% csrf_token %}
+      <button type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#resultsModal"
+              hx-post="{% url 'submit-team-view' %}"
+              hx-target="#validation_results">
+        Validate team
+      </button>
+    </form>
+  </div>
+{% endif %}
+<div id="players">
+  {% for player in players %}
+    <div id="player{{ forloop.counter }}">
+      <div class="card" style="width: 18rem;">
+        <img src="{{ player.player__profile_picture_url }}"
+             class="rounded mx-auto d-block"/>
+        <div class="card-body">
+          <p class="card-text">{{ player.player__full_name }}</p>
+          <p class="card-text">
+            <form>
+              {% csrf_token %}
+              <input type="hidden"
+                     id="playerId"
+                     name="playerId"
+                     value="{{ player.player__id }}">
+              <button hx-post="{% url 'remove-from-team-view' %}"
+                      hx-target="#current_player_submission">Remove from team</button>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

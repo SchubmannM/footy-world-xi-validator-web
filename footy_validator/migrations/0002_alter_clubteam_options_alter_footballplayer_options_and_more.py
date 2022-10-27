@@ -6,24 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('footy_validator', '0001_initial'),
+        ("footy_validator", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='clubteam',
-            options={'ordering': ['name']},
+            name="clubteam",
+            options={"ordering": ["name"]},
         ),
         migrations.AlterModelOptions(
-            name='footballplayer',
-            options={'ordering': ['full_name']},
+            name="footballplayer",
+            options={"ordering": ["full_name"]},
         ),
         migrations.AlterModelOptions(
-            name='nationalteam',
-            options={'ordering': ['name']},
+            name="nationalteam",
+            options={"ordering": ["name"]},
         ),
         migrations.AlterModelOptions(
-            name='usersubmission',
-            options={'get_latest_by': 'modified'},
+            name="usersubmission",
+            options={"get_latest_by": "modified"},
         ),
     ]

@@ -4,32 +4,34 @@ from crispy_forms.layout import Submit
 from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView
 
 from .dataclasses import FootballPlayerData, UserSubmissionData
 from .forms import FootballPlayerForm, FootballPlayerFormSetHelper
-from .models import FootballPlayer, UserSubmission
+from .logic.get_player_from_transfermarkt import get_player_search_result
+from .models import (
+    FootballPlayer,
+    TemporarySubmissionPlayers,
+    TemporaryUserSubmission,
+    UserSubmission,
+)
 
 
 def index(request):
-    FootballPlayerFormSet = formset_factory(
-        FootballPlayerForm, min_num=11, max_num=11, can_delete=False, can_order=False
-    )
-    helper = FootballPlayerFormSetHelper()
-    helper.add_input(Submit("submit", "Validate"))
-    if request.method == "POST":
-        user_submission: UserSubmissionData = UserSubmissionData()
-        formset = FootballPlayerFormSet(request.POST)
-        if formset.is_valid():
-            for form in formset:
-                player: FootballPlayerData = form.cleaned_data.get("player")
-                user_submission.players.append(player)
-            instance = user_submission.to_instance()
-            return redirect("user-submission-view", id=instance.id)
+    if request.session.get("temp_submission_id", None):
+        temp_submission, created = TemporaryUserSubmission.objects.get_or_create(
+            id=request.session["temp_submission_id"]
+        )
     else:
-        formset = FootballPlayerFormSet()
-
-    return render(request, "index.html", {"formset": formset, "helper": helper})
+        temp_submission = TemporaryUserSubmission.objects.create()
+        request.session["temp_submission_id"] = str(temp_submission.id)
+    players = (
+        TemporarySubmissionPlayers.objects.filter(temp_user_submission=temp_submission)
+        .order_by("-created")
+        .values("player__full_name", "player__id", "player__profile_picture_url")
+    )
+    return render(request, "index.html", {"players": players})
 
 
 class UserSubmissionView(DetailView):

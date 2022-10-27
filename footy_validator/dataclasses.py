@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
+from optparse import Option
 from typing import List, Optional
+
 from .models import ClubTeam, FootballPlayer, NationalTeam, UserSubmission
 
 
@@ -11,6 +13,9 @@ class ClubTeamData:
         team, _ = ClubTeam.objects.get_or_create(name=self.name)
         return team
 
+    def from_instance(instance) -> "ClubTeamData":
+        return ClubTeamData(name=instance.name)
+
 
 @dataclass
 class NationalTeamData:
@@ -20,6 +25,9 @@ class NationalTeamData:
         team, _ = NationalTeam.objects.get_or_create(name=self.name)
         return team
 
+    def from_instance(instance) -> "NationalTeamData":
+        return NationalTeamData(name=instance.name)
+
 
 @dataclass
 class FootballPlayerData:
@@ -27,6 +35,8 @@ class FootballPlayerData:
     full_name: Optional[str]
     birthday: Optional[str]
     alias: Optional[str]
+    profile_picture_url: Optional[str]
+    profile_url: Optional[str]
 
     club_teams: List[ClubTeamData] = field(default_factory=list)
     national_teams: List[NationalTeamData] = field(default_factory=list)
@@ -38,12 +48,24 @@ class FootballPlayerData:
             full_name=player.full_name,
             birthday=player.birthday,
             alias=player.alias,
-            club_teams=list(player.club_teams.values_list("name", flat=True)),
-            national_teams=list(player.national_teams.values_list("name", flat=True)),
+            profile_picture_url=player.profile_picture_url,
+            profile_url=player.profile_url,
+            club_teams=[
+                ClubTeamData.from_instance(club_team)
+                for club_team in player.club_teams.all()
+            ],
+            national_teams=[
+                NationalTeamData.from_instance(national_team)
+                for national_team in player.national_teams.all()
+            ],
         )
 
     def to_instance(self) -> FootballPlayer:
-        player, created = FootballPlayer.objects.get_or_create(full_name=self.full_name)
+        player, created = FootballPlayer.objects.get_or_create(
+            full_name=self.full_name,
+            profile_picture_url=self.profile_picture_url,
+            profile_url=self.profile_picture_url,
+        )
         if created:
             club_teams = [team.to_instance() for team in self.club_teams]
             national_teams = [team.to_instance() for team in self.national_teams]
@@ -54,7 +76,8 @@ class FootballPlayerData:
 
 @dataclass
 class UserSubmissionValidation:
-    reason_incorrect: Optional[str]
+    player: FootballPlayerData
+    reasons_incorrect: List[str]
 
 
 @dataclass

@@ -10,6 +10,7 @@ python-dotenv = "*"
 pylint = "*"
 mypy = "*"
 django-debug-toolbar = "*"
+djlint = "*"
 
 [packages]
 dj-database-url = "==1.0.0"
@@ -22,6 +23,9 @@ django-crispy-forms = "*"
 requests = "*"
 sentry-sdk = "*"
 daphne = "*"
+djangorestframework = "*"
+django-htmx = "*"
+debugpy = "*"
 
 [pipenv]
 allow_prereleases = true

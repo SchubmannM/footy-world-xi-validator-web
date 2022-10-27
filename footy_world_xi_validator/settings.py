@@ -8,10 +8,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import os
-
-from configurations import Configuration, values
+import socket
 
 import sentry_sdk
+from configurations import Configuration, values
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
@@ -39,6 +39,8 @@ class Base(Configuration):
         # 3rd party
         "django_extensions",
         "crispy_forms",
+        "rest_framework",
+        "django_htmx",
         # Own packages
         "footy_world_xi_validator.users",
         "footy_validator",
@@ -52,6 +54,7 @@ class Base(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "django_htmx.middleware.HtmxMiddleware",
     ]
 
     ROOT_URLCONF = "footy_world_xi_validator.urls"
@@ -68,6 +71,7 @@ class Base(Configuration):
                     "django.contrib.auth.context_processors.auth",
                     "django.contrib.messages.context_processors.messages",
                 ],
+                "debug": DEBUG,
             },
         },
     ]
@@ -77,13 +81,13 @@ class Base(Configuration):
     # # Database
     # # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': 'db',
-            'PORT': 5432,
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB"),
+            "USER": os.environ.get("POSTGRES_USER"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+            "HOST": "db",
+            "PORT": 5432,
         }
     }
 
@@ -93,9 +97,15 @@ class Base(Configuration):
         {
             "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
         },
-        {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-        {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-        {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+        {
+            "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        },
+        {
+            "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        },
+        {
+            "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        },
     ]
 
     # Internationalization
@@ -114,6 +124,13 @@ class Base(Configuration):
     # https://docs.djangoproject.com/en/3.0/howto/static-files/
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
+    STATICFILES_FINDERS = [
+        "django.contrib.staticfiles.finders.FileSystemFinder",
+        "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    ]
 
     # MEDIA settings
     MEDIA_URL = "/media/"
@@ -132,17 +149,24 @@ class Dev(Base):
 
     DEBUG = True
 
-    ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(',')
-
-    INTERNAL_IPS = ["127.0.0.1"]
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + "1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
     MIDDLEWARE = Base.MIDDLEWARE + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
     INSTALLED_APPS = Base.INSTALLED_APPS + ["debug_toolbar"]
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        }
+    }
+
 
 class Staging(Base):
     """
     The in-staging settings.
     """
+
     # Security
     SESSION_COOKIE_SECURE = values.BooleanValue(True)
     SECURE_BROWSER_XSS_FILTER = values.BooleanValue(True)
@@ -152,7 +176,12 @@ class Staging(Base):
     SESSION_COOKIE_SECURE = values.BooleanValue(True)
     CSRF_COOKIE_SECURE = values.BooleanValue(True)
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    CSRF_TRUSTED_ORIGINS = ['https://www.schubmann.dev', 'https://schubmann.dev', 'https://www.schubmann.dev']
+    CSRF_TRUSTED_ORIGINS = [
+        "https://www.schubmann.dev",
+        "https://schubmann.dev",
+        "https://www.schubmann.dev",
+    ]
+
 
 class Prod(Staging):
     """
