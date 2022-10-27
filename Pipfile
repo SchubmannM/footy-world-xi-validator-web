@@ -26,6 +26,7 @@ daphne = "*"
 djangorestframework = "*"
 django-htmx = "*"
 debugpy = "*"
+twisted = {extras = ["http2", "tls"], version = "*"}
 
 [pipenv]
 allow_prereleases = true
