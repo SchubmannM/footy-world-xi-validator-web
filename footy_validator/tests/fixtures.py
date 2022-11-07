@@ -1,8 +1,6 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from footy_validator.dataclasses import UserSubmissionValidation
-
 
 @pytest.fixture
 def search_result_soup():
@@ -1553,5 +1551,13 @@ def detailed_view_soup():
 
 
 @pytest.fixture
-def user_submission():
-    return UserSubmissionValidation()
+def user_submission(
+    user_submission_factory,
+    football_player_factory,
+    club_team_factory,
+    national_team_factory,
+):
+    user_submission = user_submission_factory()
+    bayern = club_team_factory(name="Bayern Munich")
+    barca = club_team_factory(name="FC Barcelona")
+    return user_submission

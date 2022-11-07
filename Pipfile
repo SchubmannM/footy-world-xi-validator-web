@@ -17,6 +17,8 @@ pytest-mock = "*"
 pytest-django = "*"
 reorder-python-imports = "*"
 pre-commit = "*"
+pytest-factoryboy = "*"
+faker = "*"
 
 [packages]
 dj-database-url = "==1.0.0"
