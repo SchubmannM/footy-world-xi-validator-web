@@ -1,15 +1,14 @@
 import logging
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
 
-from footy_validator.dataclasses import (
-    ClubTeamData,
-    FootballPlayerData,
-    NationalTeamData,
-)
+from footy_validator.dataclasses import ClubTeamData
+from footy_validator.dataclasses import FootballPlayerData
+from footy_validator.dataclasses import NationalTeamData
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
@@ -26,11 +25,15 @@ class PlayerSearchResult:
     player_name: str
 
 
-def get_player_search_result(input_player_name: str) -> Optional[PlayerSearchResult]:
-    page = f"{BASE_URL}/schnellsuche/ergebnis/schnellsuche?query={input_player_name}&x=0&y=0"
-
-    search_tree = requests.get(page, headers=HEADERS)
+def get_soup_from_url(url: str) -> BeautifulSoup:
+    search_tree = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(search_tree.content, "html.parser")
+    return soup
+
+
+def get_player_search_result(input_player_name: str) -> Optional[PlayerSearchResult]:
+    url = f"{BASE_URL}/schnellsuche/ergebnis/schnellsuche?query={input_player_name}&x=0&y=0"
+    soup = get_soup_from_url(url)
     player = soup.find("td", {"class": "hauptlink"})
     if not player:
         logger.info("Player {input_player_name} could not be found.")
@@ -49,12 +52,10 @@ def get_player_search_result(input_player_name: str) -> Optional[PlayerSearchRes
     )
 
 
-def get_player_from_url(player_url) -> Optional[FootballPlayerData]:
+def get_player_from_url(player_url: str) -> Optional[FootballPlayerData]:
     teams: List[ClubTeamData] = list()
     national_teams: List[NationalTeamData] = list()
-
-    pageTree = requests.get(player_url, headers=HEADERS)
-    pageSoup = BeautifulSoup(pageTree.content, "html.parser")
+    pageSoup = get_soup_from_url(player_url)
     profile_image = pageSoup.find("img", {"class": "data-header__profile-image"})
     player_name = profile_image.get("alt")
     profile_picture_url = profile_image.get("src")

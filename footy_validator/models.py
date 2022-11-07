@@ -83,7 +83,7 @@ class UserSubmission(TimeStampedModel):
 
     @classmethod
     def validate(cls, instance):
-        from .logic.squad_validation import validate_user_submission
+        from footy_validator.logic.squad_validation import validate_user_submission
 
         user_submission_instance = UserSubmission.objects.prefetch_related(
             "players__club_teams", "players__national_teams"

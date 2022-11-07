@@ -2,12 +2,12 @@ from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from .logic.get_player_from_transfermarkt import (
-    get_player_from_url,
-    get_player_search_result,
-)
-from .logic.squad_validation import validate_user_submission
-from .models import TemporarySubmissionPlayers, TemporaryUserSubmission, UserSubmission
+from footy_validator.logic.get_player_from_transfermarkt import get_player_from_url
+from footy_validator.logic.get_player_from_transfermarkt import get_player_search_result
+from footy_validator.logic.squad_validation import validate_user_submission
+from footy_validator.models import TemporarySubmissionPlayers
+from footy_validator.models import TemporaryUserSubmission
+from footy_validator.models import UserSubmission
 
 
 @require_POST

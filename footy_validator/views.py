@@ -3,19 +3,21 @@ from uuid import UUID
 from crispy_forms.layout import Submit
 from django.forms import formset_factory
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView
 
-from .dataclasses import FootballPlayerData, UserSubmissionData
-from .forms import FootballPlayerForm, FootballPlayerFormSetHelper
-from .logic.get_player_from_transfermarkt import get_player_search_result
-from .models import (
-    FootballPlayer,
-    TemporarySubmissionPlayers,
-    TemporaryUserSubmission,
-    UserSubmission,
-)
+from footy_validator.dataclasses import FootballPlayerData
+from footy_validator.dataclasses import UserSubmissionData
+from footy_validator.forms import FootballPlayerForm
+from footy_validator.forms import FootballPlayerFormSetHelper
+from footy_validator.logic.get_player_from_transfermarkt import get_player_search_result
+from footy_validator.models import FootballPlayer
+from footy_validator.models import TemporarySubmissionPlayers
+from footy_validator.models import TemporaryUserSubmission
+from footy_validator.models import UserSubmission
 
 
 def index(request):

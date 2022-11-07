@@ -11,6 +11,12 @@ pylint = "*"
 mypy = "*"
 django-debug-toolbar = "*"
 djlint = "*"
+ipython = "*"
+jupyter = "*"
+pytest-mock = "*"
+pytest-django = "*"
+reorder-python-imports = "*"
+pre-commit = "*"
 
 [packages]
 dj-database-url = "==1.0.0"

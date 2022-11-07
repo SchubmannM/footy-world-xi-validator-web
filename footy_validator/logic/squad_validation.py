@@ -1,8 +1,10 @@
 import logging
-from typing import List, Optional
+from typing import List
 
-from footy_validator.dataclasses import FootballPlayerData, UserSubmissionValidation
-from footy_validator.models import FootballPlayer, UserSubmission
+from footy_validator.dataclasses import FootballPlayerData
+from footy_validator.dataclasses import UserSubmissionValidation
+from footy_validator.models import FootballPlayer
+from footy_validator.models import UserSubmission
 
 logger = logging.getLogger(__name__)
 

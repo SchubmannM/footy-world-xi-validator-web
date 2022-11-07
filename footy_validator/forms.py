@@ -1,10 +1,14 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Fieldset, Layout, MultiField
+from crispy_forms.layout import Div
+from crispy_forms.layout import Field
+from crispy_forms.layout import Fieldset
+from crispy_forms.layout import Layout
+from crispy_forms.layout import MultiField
 from django import forms
 
 from .dataclasses import FootballPlayerData
-from .logic.get_player_from_transfermarkt import get_player_from_url
-from .models import FootballPlayer
+from footy_validator.logic.get_player_from_transfermarkt import get_player_from_url
+from footy_validator.models import FootballPlayer
 
 
 class FootballPlayerForm(forms.ModelForm):
