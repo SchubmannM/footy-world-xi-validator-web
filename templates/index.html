@@ -1,26 +1,11 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 {% block content %}
   <div class="container">
     <div class="jumbotron">
       <h1 class="display-4">Welcome to Footy World XI Validator</h1>
       <p class="lead">The intention of this app is to be a validator for a little game that was started on Twitter:</p>
-      <div class="d-flex justify-content-center">
-        <blockquote class="twitter-tweet">
-          <p lang="en" dir="ltr">
-            Inspired by <a href="https://twitter.com/Carra23?ref_src=twsrc%5Etfw">@Carra23</a>, quote this with your picks for the greatest World XI under these the rules:
-            <br/>
-            <br/>
-            • No two players from the same country
-            <br/>
-            • No two can have played for the same club
-            <br/>
-            • All eleven have to have played in your lifetime
-          </p>
-          MUNDIAL (H) (@MundialMag) <a href="https://twitter.com/MundialMag/status/1250080258122022915?ref_src=twsrc%5Etfw">April 14, 2020</a>
-        </blockquote>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-      </div>
+      {% include "twitter.html" %}
       <hr class="my-4"/>
       <p>Go ahead and submit your World XI and see if it meets the criteria or not 😊</p>
     </div>
@@ -54,6 +39,33 @@
         </div>
       </div>
     </div>
-    <div id="current_player_submission">{% include "partials/temporary_team.html" %}</div>
-  </div>
+    {% component "player_search" %}
+    {% if players.count > 1 %}
+      <div id="submit_validation">
+        <form>
+          {% csrf_token %}
+          <button type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#resultsModal"
+                  hx-post="{% url 'submit-team-view' %}"
+                  hx-target="#validation_results">
+            Validate team
+          </button>
+        </form>
+      </div>
+    {% endif %}
+    <div id="indicator" class="loader htmx-indicator"></div>
+    {% component_block "team_view" %}
+      {% slot body %}
+        <div id="players"
+        hx-get="{% url 'football-team' %}"
+        hx-trigger="load, football-team-updated from:body"
+        hx-target="this"
+        hx-swap="innerHTML"
+        hx-indicator="#indicator"
+        ></div>
+      {% endslot %}
+    {% endcomponent_block %}
+</div>
 {% endblock content %}

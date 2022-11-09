@@ -19,6 +19,7 @@ reorder-python-imports = "*"
 pre-commit = "*"
 pytest-factoryboy = "*"
 faker = "*"
+autoflake = "*"
 
 [packages]
 dj-database-url = "==1.0.0"
@@ -35,6 +36,7 @@ djangorestframework = "*"
 django-htmx = "*"
 debugpy = "*"
 twisted = {extras = ["http2", "tls"], version = "*"}
+django-components = "*"
 
 [pipenv]
 allow_prereleases = true
