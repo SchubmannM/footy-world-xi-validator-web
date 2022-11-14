@@ -18,13 +18,14 @@ services:
     ports:
       - 8000:8000
       - 5678:5678
+      - 9922:22
     depends_on:
       - db
     env_file:
       - ./.env.dev
     networks:
       - proxynet
-      
+
 volumes:
   postgres_data:
   static_volume:
