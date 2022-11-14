@@ -7,16 +7,16 @@
         <input type="hidden"
                id="playerUrl"
                name="playerUrl"
-               value="{{ search_result.player_url }}">
+               value="{{ search_result.player_url }}" />
         <div id="search_results_content">
             <div id="search_result_player_image">
-                <img class="img-thumbnail" src="{{ search_result.player_picture }}">
+                <img class="img-thumbnail" src="{{ search_result.player_picture }}" alt="Player thumbnail"/>
             </div>
             <div id="search_result_player_name">{{ search_result.player_name }}</div>
             <div id="search_result_button">
                 <button class="btn btn-primary"
-                        hx-post="{% url 'add-to-team-view' %}"
-                        hx-target="#current_player_submission">
+                        hx-post="{% url 'football-team' %}"
+                        >
                     Add to team
                 </button>
             </div>

@@ -1,0 +1,15 @@
+{% if players|length > 0 %}
+<div id="submit_validation">
+    <form>
+      {% csrf_token %}
+      <button type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#resultsModal"
+              hx-post="{% url 'submit-team-view' %}"
+              hx-target="#validation_results">
+        Validate team
+      </button>
+    </form>
+  </div>
+  {% endif %}

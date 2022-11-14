@@ -11,7 +11,8 @@ import os
 import socket
 
 import sentry_sdk
-from configurations import Configuration, values
+from configurations import Configuration
+from configurations import values
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
@@ -41,6 +42,7 @@ class Base(Configuration):
         "crispy_forms",
         "rest_framework",
         "django_htmx",
+        "django_components",
         # Own packages
         "footy_world_xi_validator.users",
         "footy_validator",
@@ -63,13 +65,25 @@ class Base(Configuration):
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
             "DIRS": [os.path.join(BASE_DIR, "templates")],
-            "APP_DIRS": True,
             "OPTIONS": {
                 "context_processors": [
                     "django.template.context_processors.debug",
                     "django.template.context_processors.request",
                     "django.contrib.auth.context_processors.auth",
                     "django.contrib.messages.context_processors.messages",
+                ],
+                "builtins": [
+                    "django_components.templatetags.component_tags",
+                ],
+                "loaders": [
+                    (
+                        "django.template.loaders.cached.Loader",
+                        [
+                            "django.template.loaders.filesystem.Loader",
+                            "django.template.loaders.app_directories.Loader",
+                            "django_components.template_loader.Loader",
+                        ],
+                    )
                 ],
                 "debug": DEBUG,
             },
@@ -126,6 +140,7 @@ class Base(Configuration):
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "static"),
+        os.path.join(BASE_DIR, "components"),
     ]
     STATICFILES_FINDERS = [
         "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -180,7 +195,7 @@ class Staging(Base):
         "https://www.schubmann.dev",
         "https://schubmann.dev",
         "https://www.schubmann.dev",
-        "https://footy.schubmann.dev"
+        "https://footy.schubmann.dev",
     ]
 
 

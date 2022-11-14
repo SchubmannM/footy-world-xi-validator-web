@@ -1,0 +1,16 @@
+{% if not players or players|length < 11 %}
+  <div class="form-floating" id="player_name_form">
+    <input type="text"
+          class="form-control"
+          name="player_name"
+          hx-post="{% url 'find-player-view' %}"
+          hx-trigger="keyup delay:500ms changed"
+          hx-target="#search-results"
+          placeholder="Player name"/>
+    <label for="player_name">Add player name</label>
+  </div>
+  <div id="search-results"></div>
+{% endif %}
+
+<br />
+<p>Current number of players: {{ players|length }}</p>
