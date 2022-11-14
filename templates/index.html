@@ -39,22 +39,21 @@
         </div>
       </div>
     </div>
-    {% component "player_search" %}
-    {% if players.count > 1 %}
-      <div id="submit_validation">
-        <form>
-          {% csrf_token %}
-          <button type="button"
-                  class="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#resultsModal"
-                  hx-post="{% url 'submit-team-view' %}"
-                  hx-target="#validation_results">
-            Validate team
-          </button>
-        </form>
-      </div>
-    {% endif %}
+    <div id="player_search"
+        hx-get="{% url 'player-search' %}"
+        hx-trigger="load, football-team-updated from:body"
+        hx-target="this"
+        hx-swap="innerHTML"
+        hx-indicator="#indicator"
+    ></div>
+    <div id="player_validation_form"
+        hx-get="{% url 'player-validation-form' %}"
+        hx-trigger="load, football-team-updated from:body"
+        hx-target="this"
+        hx-swap="innerHTML"
+        hx-indicator="#indicator"
+    ></div>
+
     <div id="indicator" class="loader htmx-indicator"></div>
     {% component_block "team_view" %}
       {% slot body %}

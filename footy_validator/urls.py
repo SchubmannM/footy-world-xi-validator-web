@@ -1,11 +1,11 @@
 from django.urls import path
 
-from .partials import add_to_team
 from .partials import get_basic_footballer_information
-from .partials import remove_from_team
 from .partials import submit_team
-from .views import football_team_view
+from .views import football_team
 from .views import index
+from .views import player_search
+from .views import player_validation_form
 from .views import UserSubmissionView
 
 urlpatterns = [
@@ -15,9 +15,11 @@ urlpatterns = [
         UserSubmissionView.as_view(),
         name="user-submission-view",
     ),
-    path("football_team/", football_team_view, name="football-team"),
+    path("football_team/", football_team, name="football-team"),
+    path("player_search/", player_search, name="player-search"),
     path("find_player/", get_basic_footballer_information, name="find-player-view"),
-    path("add_to_team/", add_to_team, name="add-to-team-view"),
-    path("remove_from_team/", remove_from_team, name="remove-from-team-view"),
     path("submit_team/", submit_team, name="submit-team-view"),
+    path(
+        "player_validation_form/", player_validation_form, name="player-validation-form"
+    ),
 ]

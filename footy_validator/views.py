@@ -33,7 +33,7 @@ class UserSubmissionView(DetailView):
 
 
 @require_http_methods(["GET", "POST", "DELETE"])
-def football_team_view(request):
+def football_team(request):
     if request.method == "GET":
         players = get_players_from_request(request)
         context = {"players": players}
@@ -70,3 +70,18 @@ def football_team_view(request):
             {},
         )
         return response
+    return HttpResponse(500)
+
+
+@require_http_methods(["GET"])
+def player_search(request):
+    players = get_players_from_request(request)
+    context = {"players": players}
+    return TemplateResponse(request, "partials/player_search.html", context)
+
+
+@require_http_methods(["GET"])
+def player_validation_form(request):
+    players = get_players_from_request(request)
+    context = {"players": players}
+    return TemplateResponse(request, "partials/player_validation_form.html", context)
