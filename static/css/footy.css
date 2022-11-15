@@ -36,10 +36,28 @@
     width: 33%;
 }
 
-.player_validation_photo {
-    height: fit-content;
-}
+
 
 body>footer>div>div>div:nth-child(2)>a:nth-child(n) {
     text-decoration: none;
+}
+#validations {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+    row-gap: 20px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.club_image {
+    grid-column: 1;
+    margin:auto;
+}
+.player_validation_photo {
+    height: min-content;
+}
+.player_teams {
+    grid-column: 2;
+    margin-top: auto;
+    margin-bottom: auto;
 }

@@ -9,36 +9,8 @@
       <hr class="my-4"/>
       <p>Go ahead and submit your World XI and see if it meets the criteria or not 😊</p>
     </div>
-    <!-- Modal -->
-    <div class="modal fade"
-         id="resultsModal"
-         tabindex="-1"
-         aria-labelledby="resultsModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="resultsModalLabel">Results</h1>
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div id="validation_results">
-              <div id="indicator htmx-indicator" class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button"
-                    class="btn btn-lg btn-primary mt-5 w-100"
-                    data-bs-dismiss="modal">Back</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include 'validation_modal.html' %}
+
     <div id="player_search"
         hx-get="{% url 'player-search' %}"
         hx-trigger="load, football-team-updated from:body"
@@ -46,6 +18,7 @@
         hx-swap="innerHTML"
         hx-indicator="#indicator"
     ></div>
+
     <div id="player_validation_form"
         hx-get="{% url 'player-validation-form' %}"
         hx-trigger="load, football-team-updated from:body"
@@ -54,7 +27,9 @@
         hx-indicator="#indicator"
     ></div>
 
-    <div id="indicator" class="loader htmx-indicator"></div>
+    <div id="indicator" class="loader htmx-indicator">
+    </div>
+
     {% component_block "team_view" %}
       {% slot body %}
         <div id="players"
@@ -66,5 +41,6 @@
         ></div>
       {% endslot %}
     {% endcomponent_block %}
+
 </div>
 {% endblock content %}

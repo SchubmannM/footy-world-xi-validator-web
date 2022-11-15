@@ -7,6 +7,7 @@ from django_extensions.db.models import TimeStampedModel
 class NationalTeam(TimeStampedModel):
     id = models.UUIDField(editable=False, default=uuid.uuid4, primary_key=True)
     name = models.CharField(max_length=300)
+    team_picture_url = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ["name"]
@@ -21,6 +22,7 @@ class NationalTeam(TimeStampedModel):
 class ClubTeam(TimeStampedModel):
     id = models.UUIDField(editable=False, default=uuid.uuid4, primary_key=True)
     name = models.CharField(max_length=300)
+    team_picture_url = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ["name"]

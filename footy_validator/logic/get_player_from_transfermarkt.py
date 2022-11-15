@@ -64,9 +64,19 @@ def get_player_from_url(player_url: str) -> Optional[FootballPlayerData]:
     )
 
     for club in all_clubs:
+        club_img = ""
         club_name = club.get("alt")
+        data_srcset = club.get("data-srcset")
+        club_img = (
+            data_srcset.strip().replace("\n", "").replace("tiny", "big").split(" ")[0]
+        )
+        if "_" in club_img:
+            # Some teams have something like a hash in their filename - we remove it here.
+            first_part, second_part = club_img.split("_")
+            _, cleansed_second_part = second_part.split(".")
+            club_img = f"{first_part}.{cleansed_second_part}"
         if club_name and club_name != "Retired":
-            teams.append(ClubTeamData(name=club_name))
+            teams.append(ClubTeamData(name=club_name, team_picture_url=club_img))
 
     national_team_table = pageSoup.find(string="National team career").find_parent(
         "div"
@@ -76,8 +86,18 @@ def get_player_from_url(player_url: str) -> Optional[FootballPlayerData]:
             "div", {"class": "grid national-career__row"}
         )
         for team in all_national_teams:
-            national_team_name = team.find("img").get("alt")
-            national_teams.append(NationalTeamData(name=national_team_name))
+            team_img = team.find("img")
+            national_team_name = team_img.get("alt")
+            team_img = (
+                team_img.get("data-src")
+                .strip()
+                .replace("\n", "")
+                .replace("verysmall", "head")
+                .split(" ")[0]
+            )
+            national_teams.append(
+                NationalTeamData(name=national_team_name, team_picture_url=team_img)
+            )
 
     player = FootballPlayerData(
         full_name=player_name,

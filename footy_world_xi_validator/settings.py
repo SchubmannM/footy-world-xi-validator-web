@@ -39,8 +39,6 @@ class Base(Configuration):
         "django.contrib.staticfiles",
         # 3rd party
         "django_extensions",
-        "crispy_forms",
-        "rest_framework",
         "django_htmx",
         "django_components",
         # Own packages
@@ -152,9 +150,6 @@ class Base(Configuration):
     MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
     AUTH_USER_MODEL = "users.User"
-
-    # Django Crispy Forms
-    CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
 class Dev(Base):

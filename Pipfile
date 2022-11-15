@@ -20,6 +20,7 @@ pre-commit = "*"
 pytest-factoryboy = "*"
 faker = "*"
 autoflake = "*"
+debugpy = "*"
 
 [packages]
 dj-database-url = "==1.0.0"
@@ -28,13 +29,10 @@ django-extensions = "==3.2.1"
 Django = "==4.1.2"
 psycopg2-binary = "==2.9.3"
 beautifulsoup4 = "*"
-django-crispy-forms = "*"
 requests = "*"
 sentry-sdk = "*"
 daphne = "*"
-djangorestframework = "*"
 django-htmx = "*"
-debugpy = "*"
 twisted = {extras = ["http2", "tls"], version = "*"}
 django-components = "*"
 

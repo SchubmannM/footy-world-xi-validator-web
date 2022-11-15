@@ -6,15 +6,9 @@ from .views import football_team
 from .views import index
 from .views import player_search
 from .views import player_validation_form
-from .views import UserSubmissionView
 
 urlpatterns = [
     path("", index, name="index"),
-    path(
-        "submission/<uuid:id>",
-        UserSubmissionView.as_view(),
-        name="user-submission-view",
-    ),
     path("football_team/", football_team, name="football-team"),
     path("player_search/", player_search, name="player-search"),
     path("find_player/", get_basic_footballer_information, name="find-player-view"),
