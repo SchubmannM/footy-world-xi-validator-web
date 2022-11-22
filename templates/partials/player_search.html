@@ -6,6 +6,7 @@
           hx-post="{% url 'find-player-view' %}"
           hx-trigger="keyup delay:500ms changed"
           hx-target="#search-results"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           placeholder="Player name"/>
     <label for="player_name">Add player name</label>
   </div>
