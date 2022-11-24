@@ -1,17 +1,16 @@
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView
 from django_htmx.http import trigger_client_event
 
 from footy_validator.logic.get_player_from_transfermarkt import get_player_from_url
 from footy_validator.models import TemporarySubmissionPlayers
 from footy_validator.models import TemporaryUserSubmission
-from footy_validator.models import UserSubmission
 from footy_validator.utils import get_players_from_request
 from footy_validator.utils import get_temp_team_id_from_session
 
 
+@require_http_methods(["GET"])
 def index(request):
     temp_submission_id = request.session.get("temp_submission_id", None)
     temp_submission, _ = TemporaryUserSubmission.objects.get_or_create(
@@ -19,17 +18,6 @@ def index(request):
     )
     request.session["temp_submission_id"] = str(temp_submission.id)
     return TemplateResponse(request, "index.html", {})
-
-
-class UserSubmissionView(DetailView):
-    queryset = UserSubmission.objects.all()
-    template_name = "submission_detail.html"
-    pk_url_kwarg = "id"
-    context_object_name = "submission"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 
 @require_http_methods(["GET", "POST", "DELETE"])

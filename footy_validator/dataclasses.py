@@ -1,32 +1,38 @@
-from dataclasses import dataclass, field
-from optparse import Option
-from typing import List, Optional
+from dataclasses import dataclass
+from dataclasses import field
+from typing import List
+from typing import Optional
 
-from .models import ClubTeam, FootballPlayer, NationalTeam, UserSubmission
+from .models import ClubTeam
+from .models import FootballPlayer
+from .models import NationalTeam
+from .models import UserSubmission
 
 
-@dataclass
-class ClubTeamData:
-    name: Optional[str]
+@dataclass(eq=False)
+class Team:
+    name: str
+    players: List["FootballPlayerData"] = field(default_factory=list)
+    team_picture_url: Optional[str] = None
 
+    def __eq__(self, other):
+        return self.name == other.name
+
+
+class ClubTeamData(Team):
     def to_instance(self) -> ClubTeam:
-        team, _ = ClubTeam.objects.get_or_create(name=self.name)
+        team, _ = ClubTeam.objects.update_or_create(
+            name=self.name, defaults={"team_picture_url": self.team_picture_url}
+        )
         return team
 
-    def from_instance(instance) -> "ClubTeamData":
-        return ClubTeamData(name=instance.name)
 
-
-@dataclass
-class NationalTeamData:
-    name: Optional[str]
-
+class NationalTeamData(Team):
     def to_instance(self) -> NationalTeam:
-        team, _ = NationalTeam.objects.get_or_create(name=self.name)
+        team, _ = NationalTeam.objects.update_or_create(
+            name=self.name, defaults={"team_picture_url": self.team_picture_url}
+        )
         return team
-
-    def from_instance(instance) -> "NationalTeamData":
-        return NationalTeamData(name=instance.name)
 
 
 @dataclass
@@ -40,25 +46,6 @@ class FootballPlayerData:
 
     club_teams: List[ClubTeamData] = field(default_factory=list)
     national_teams: List[NationalTeamData] = field(default_factory=list)
-
-    @classmethod
-    def from_instance(cls, player: FootballPlayer) -> "FootballPlayerData":
-        return FootballPlayerData(
-            player_instance=player,
-            full_name=player.full_name,
-            birthday=player.birthday,
-            alias=player.alias,
-            profile_picture_url=player.profile_picture_url,
-            profile_url=player.profile_url,
-            club_teams=[
-                ClubTeamData.from_instance(club_team)
-                for club_team in player.club_teams.all()
-            ],
-            national_teams=[
-                NationalTeamData.from_instance(national_team)
-                for national_team in player.national_teams.all()
-            ],
-        )
 
     def to_instance(self) -> FootballPlayer:
         player, created = FootballPlayer.objects.get_or_create(
@@ -76,8 +63,8 @@ class FootballPlayerData:
 
 @dataclass
 class UserSubmissionValidation:
-    player: FootballPlayerData
-    reasons_incorrect: List[str]
+    team: Team
+    players: List["FootballPlayerData"]
 
 
 @dataclass

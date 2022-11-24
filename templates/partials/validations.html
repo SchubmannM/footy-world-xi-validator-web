@@ -4,23 +4,36 @@
     </div>
 {% else %}
     <div class="alert alert-danger" role="alert">
-        Sadly your chosen team does not comply with the outlined rules. You can check the conflicting players below.
+        Sadly your chosen team does not comply with the outlined rules. You can check conflicts below.
     </div>
 {% endif %}
-<div>
-    {% for validation in validations %}
-        <ul class="d-grid gap-4 my-5 list-unstyled">
+<div id="validations">
+    {% comment %} {% for validation in validations %}
+        <ul class="d-grid gap-5 my-5 list-unstyled">
             <li class="d-flex gap-4">
-                <img class="player_validation_photo"
-                     src="{{ validation.player.profile_picture_url }}"
-                     alt="Player photo"/>
+                <img class="player_validation_photo rounded "
+                     src="{{ validation.team.team_picture_url }}"
+                     alt="{{ validation.team.name }}"/>
                 <div>
-                    <h5 class="mb-0">{{ validation.player.full_name }}</h5>
+                    <h5 class="mb-0">{{ validation.team.name }}</h5>
                     <ul>
-                        {% for reason in validation.reasons_incorrect %}<li>{{ reason }}</li>{% endfor %}
+                        {% for player in validation.players %}<li>{{ player.full_name }}</li>{% endfor %}
                     </ul>
                 </div>
             </li>
         </ul>
+    {% endfor %} {% endcomment %}
+    {% for validation in validations %}
+        <div class="club_image">
+            <img class="player_validation_photo rounded "
+                    src="{{ validation.team.team_picture_url }}"
+                    alt="{{ validation.team.name }}"/>
+        </div>
+        <div class="player_teams">
+            <h5>{{ validation.team.name }}</h5>
+            <ul>
+                {% for player in validation.players %}<li>{{ player.full_name }}</li>{% endfor %}
+            </ul>
+        </div>
     {% endfor %}
 </div>
