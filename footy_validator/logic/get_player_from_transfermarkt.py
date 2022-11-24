@@ -75,7 +75,7 @@ def get_player_from_url(player_url: str) -> Optional[FootballPlayerData]:
             first_part, second_part = club_img.split("_")
             _, cleansed_second_part = second_part.split(".")
             club_img = f"{first_part}.{cleansed_second_part}"
-        if club_name and club_name != "Retired":
+        if club_name and club_name != "Retired" and club_name != "Without Club":
             teams.append(ClubTeamData(name=club_name, team_picture_url=club_img))
 
     national_team_table = pageSoup.find(string="National team career").find_parent(
