@@ -2,6 +2,7 @@ from django.urls import path
 
 from .partials import get_basic_footballer_information
 from .partials import submit_team
+from .views import callback
 from .views import football_team
 from .views import index
 from .views import player_search
@@ -16,4 +17,5 @@ urlpatterns = [
     path(
         "player_validation_form/", player_validation_form, name="player-validation-form"
     ),
+    path("callback/", callback),
 ]
