@@ -6,4 +6,4 @@ imports = ["django"]
 plugins = ["./configurations_mypy_django_plugin.py"]
 
 [tool.django-stubs]
-django_settings_module = "footy_world_xi_validator.settings"
+django_settings_module = "django_project.settings"
