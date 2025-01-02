@@ -189,7 +189,6 @@ class Staging(Base):
     CSRF_TRUSTED_ORIGINS = [
         "https://www.schubmann.dev",
         "https://schubmann.dev",
-        "https://www.schubmann.dev",
         "https://footy.schubmann.dev",
     ]
 

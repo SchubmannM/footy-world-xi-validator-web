@@ -8,7 +8,7 @@ from footy_validator.models import TemporarySubmissionPlayers
 from footy_validator.models import TemporaryUserSubmission
 from footy_validator.utils import get_players_from_request
 from footy_validator.utils import get_temp_team_id_from_session
-
+from django.core.handlers.asgi import ASGIRequest
 
 @require_http_methods(["GET"])
 def index(request):
@@ -76,6 +76,6 @@ def player_validation_form(request):
 
 
 @require_http_methods(["GET"])
-def callback(request):
-    print(request.data)
+def callback(request: ASGIRequest):
+    print(request.body)
     return HttpResponse(200)

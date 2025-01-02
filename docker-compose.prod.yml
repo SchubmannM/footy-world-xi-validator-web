@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     entrypoint: ./entrypoint.sh
+    restart: always
     command: daphne -b 0.0.0.0 -p 8000 footy_world_xi_validator.asgi:application
     volumes:
       - .:/code
